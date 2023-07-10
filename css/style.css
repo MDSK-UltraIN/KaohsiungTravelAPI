@@ -218,7 +218,7 @@ header select {
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-
+  cursor: pointer;
 }
 
 .btn_purple {
@@ -287,8 +287,63 @@ main h2 {
   margin-top: 65px;
 }
 
+.travel_spots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+}
+
+.travel_content {
+  width: 464px;
+  margin: 10px;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.20);
+}
+
+.spot_img {
+  background-position: center;
+  max-width: 464px;
+  height: 155px;
+  padding: 0 19px 14px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  color: #fff;
+}
+
+.spot_img .img_title {
+  font-size: 24px;
+}
+
+.spot_img .img_zone_title {
+  font-size: 16px;
+}
+
+.spot_detail {
+  height: 118px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  padding: 16px 0 22px 24px;
+}
+
+.spot_detail p {
+  font-size: 16px;
+  line-height: 18px;
+  font-family: AppleSystemUIFont;
+}
 
 
+.spot_detail img {
+  margin: 0 auto;
+}
+
+.ticket_info {
+  position: absolute;
+  left: 346px;
+  bottom: 22px;
+}
 
 footer {
   height: 90px;

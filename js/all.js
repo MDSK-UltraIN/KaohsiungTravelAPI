@@ -1,6 +1,7 @@
 const selectZone = document.querySelector('.selector');
-const zoneTitle = document.querySelector('.district_title')
-
+const zoneTitle = document.querySelector('.district_title');
+const mainList = document.querySelector('.travel_spots');
+const hotSpots = document.querySelectorAll('.hot_district li');
 
 // fetch API function
 async function fetchData(url) {
@@ -27,7 +28,7 @@ async function setZoneOptions() {
     // 地區列表物件
     const zoneList = {};
 
-    // 整理出不重複地區
+    // 整理出不重複地區清單
     data.forEach(item => {
       const zone = item.Zone;
       zoneList[zone] = true;
@@ -61,11 +62,11 @@ selectZone.addEventListener('change', e => {
 
 });
 
-// const zoneOptions = {};
-// responseData.forEach(item => {
-//   const zone = item.Zone;
-//   zoneOptions[zone] = true;
-// });
+// hotSpots.forEach(spot => {
+//   spot.addEventListener('click', () => {
+//     console.log(spot.textContent);
+//   })
+// })
 
 
 console.log("peehua");
