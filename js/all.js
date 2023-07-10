@@ -93,9 +93,8 @@ selectZone.addEventListener('change', e => {
 
 // 熱門行政區選擇
 hotSpots.forEach(selected => {
-  let htmlStr = '';
-
   selected.addEventListener('click', e => {
+    let htmlStr = '';
     zoneTitle.innerHTML = e.target.textContent;
     responseData.then(res => {
       const filteredData = res.filter(item => item.Zone === selected.textContent);
@@ -104,14 +103,15 @@ hotSpots.forEach(selected => {
       });
       mainList.innerHTML = htmlStr;
     })
+
   })
 });
 
 // 捲動視窗時顯示回頂部按鈕行為
 window.addEventListener("scroll", () => {
-  if(this.scrollY > 0){
+  if (this.scrollY > 0) {
     goTop.setAttribute('style', 'opacity: 100; cursor: pointer;');
-  }else {
+  } else {
     goTop.setAttribute('style', 'opacity: 0;');
   }
 });
