@@ -2,6 +2,7 @@ const selectZone = document.querySelector('.selector');
 const zoneTitle = document.querySelector('.district_title');
 const mainList = document.querySelector('.travel_spots');
 const hotSpots = document.querySelectorAll('.hot_district li');
+const goTop = document.querySelector('.btn_goTop');
 
 // fetch API function
 async function fetchData(url) {
@@ -103,7 +104,23 @@ hotSpots.forEach(selected => {
       mainList.innerHTML = htmlStr;
     })
   })
-})
+});
 
+// 捲動視窗時顯示回頂部按鈕行為
+window.addEventListener("scroll", () => {
+  if(this.scrollY > 0){
+    goTop.setAttribute('style', 'opacity: 100; cursor: pointer;');
+  }else {
+    goTop.setAttribute('style', 'opacity: 0;');
+  }
+});
+
+// 點擊回頂部按鈕
+goTop.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
 
 console.log("peehua");

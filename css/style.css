@@ -345,6 +345,14 @@ main h2 {
   bottom: 22px;
 }
 
+.btn_goTop {
+  position: fixed;
+  right: 52px;
+  bottom: 90px;
+  /* cursor: pointer;*/
+  opacity: 0; 
+}
+
 footer {
   height: 90px;
   background-color: #559AC8;
