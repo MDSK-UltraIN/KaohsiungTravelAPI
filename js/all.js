@@ -95,7 +95,8 @@ selectZone.addEventListener('change', e => {
 hotSpots.forEach(selected => {
   let htmlStr = '';
 
-  selected.addEventListener('click', () => {
+  selected.addEventListener('click', e => {
+    zoneTitle.innerHTML = e.target.textContent;
     responseData.then(res => {
       const filteredData = res.filter(item => item.Zone === selected.textContent);
       filteredData.forEach(spot => {
