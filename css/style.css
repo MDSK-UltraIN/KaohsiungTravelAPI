@@ -284,7 +284,8 @@ main h2 {
   font-size: 36px;
   color: #8A82CC;
   text-align: center;
-  margin-top: 65px;
+  margin-top: 120px;
+  margin-bottom: 24px;
 }
 
 .travel_spots {
@@ -349,8 +350,8 @@ main h2 {
   position: fixed;
   right: 52px;
   bottom: 90px;
-  /* cursor: pointer;*/
-  opacity: 0; 
+  cursor: pointer;
+  display: none;
 }
 
 footer {

@@ -1,8 +1,11 @@
+import createPagination from './module/createPagination.js';
+
 const selectZone = document.querySelector('.selector');
 const zoneTitle = document.querySelector('.district_title');
 const mainList = document.querySelector('.travel_spots');
 const hotSpots = document.querySelectorAll('.hot_district li');
 const goTop = document.querySelector('.btn_goTop');
+
 
 // fetch API function
 async function fetchData(url) {
@@ -12,14 +15,14 @@ async function fetchData(url) {
       throw new Error('API Error:' + response.status);
     }
     const data = await response.json();
-    return data.result.records;
+    const jsonData = data.result.records;
+    return jsonData;
   } catch (error) {
     console.error('something wrong', error);
   }
 }
 
 // 旅遊列表 HTML 模板
-
 function travelContentTemplate(name, zone, picture, openTime, address, tel, ticketInfo) {
   return `
   <div class="travel_content">
@@ -63,9 +66,6 @@ async function setZoneOptions() {
       optionElement.textContent = zone;
       selectZone.appendChild(optionElement);
     });
-
-
-
   } catch (error) {
     console.error('something wrong', error);
   }
@@ -108,13 +108,16 @@ hotSpots.forEach(selected => {
 });
 
 // 捲動視窗時顯示回頂部按鈕行為
-window.addEventListener("scroll", () => {
-  if (this.scrollY > 0) {
-    goTop.setAttribute('style', 'opacity: 100; cursor: pointer;');
-  } else {
-    goTop.setAttribute('style', 'opacity: 0;');
-  }
+window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      goTop.setAttribute('style', 'display: block');      
+    } else {
+      goTop.setAttribute('style', 'display: none');
+    }
+  });
 });
+
 
 // 點擊回頂部按鈕
 goTop.addEventListener('click', () => {
@@ -124,4 +127,19 @@ goTop.addEventListener('click', () => {
   });
 });
 
-console.log("peehua");
+
+// async function pagination() {
+//   try {
+//     const data = await responseData;
+//     const dataTotal = data.length;
+//     const perPage = 6;
+
+//     // 計算所需頁數
+//     const pageTotal = Math.ceil(dataTotal / perPage);
+//     console.log(`Total:${dataTotal} 每一頁:${perPage}, 頁數:${pageTotal}`);
+//   }
+//   catch (error) {
+
+//   }
+// }
+// pagination();
