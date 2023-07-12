@@ -1,10 +1,9 @@
-import createPagination from './module/createPagination.js';
-
 const selectZone = document.querySelector('.selector');
 const zoneTitle = document.querySelector('.district_title');
 const mainList = document.querySelector('.travel_spots');
 const hotSpots = document.querySelectorAll('.hot_district li');
 const goTop = document.querySelector('.btn_goTop');
+const selectPagination = document.querySelector('.pagination');
 
 
 // fetch API function
@@ -23,19 +22,20 @@ async function fetchData(url) {
 }
 
 // 旅遊列表 HTML 模板
-function travelContentTemplate(name, zone, picture, openTime, address, tel, ticketInfo) {
+// spot.Name, spot.Zone, spot.Picture1, spot.Opentime, spot.Add, spot.Tel, spot.Ticketinfo
+function travelContentTemplate(spot) {
   return `
   <div class="travel_content">
-  <div class="spot_img" style="background-image: url('${picture}')">
-    <p class="img_title">${name}</p>
-    <p class="img_zone_title">${zone}</p>
+  <div class="spot_img" style="background-image: url('${spot.Picture1}')">
+    <p class="img_title">${spot.Name}</p>
+    <p class="img_zone_title">${spot.Zone}</p>
   </div>
   <div class="spot_detail">
-    <p><img src="assets/icons_clock.png" alt="">${openTime}</p>
-    <p><img src="assets/icons_pin.png" alt="">${address}</p>
+    <p><img src="assets/icons_clock.png" alt="">${spot.Opentime}</p>
+    <p><img src="assets/icons_pin.png" alt="">${spot.Add}</p>
     
-    <p><img src="assets/icons_phone.png" alt="">${tel}</p>
-    <p class="ticket_info"><img src="assets/icons_tag.png" alt="">${ticketInfo}</p>
+    <p><img src="assets/icons_phone.png" alt="">${spot.Tel}</p>
+    <p class="ticket_info"><img src="assets/icons_tag.png" alt="">${spot.Ticketinfo}</p>
   </div>
 </div>`
 }
@@ -57,7 +57,7 @@ async function setZoneOptions() {
       const zone = item.Zone;
       zoneList[zone] = true;
     });
-    console.log(zoneList);
+    // console.log(zoneList);
 
     // 將地區新增至下拉清單
     Object.keys(zoneList).forEach(zone => {
@@ -83,10 +83,11 @@ selectZone.addEventListener('change', e => {
   responseData.then(res => {
     const filteredData = res.filter(item => item.Zone === e.target.value);
     // console.log(filteredData);
-    filteredData.forEach(spot => {
-      htmlStr += travelContentTemplate(spot.Name, spot.Zone, spot.Picture1, spot.Opentime, spot.Add, spot.Tel, spot.Ticketinfo);
-    });
-    mainList.innerHTML = htmlStr;
+    setPagination(filteredData, 1);
+    // filteredData.forEach(spot => {
+    //   htmlStr += travelContentTemplate(spot);
+    // });
+    // mainList.innerHTML = htmlStr;
   })
 
 });
@@ -98,10 +99,11 @@ hotSpots.forEach(selected => {
     zoneTitle.innerHTML = e.target.textContent;
     responseData.then(res => {
       const filteredData = res.filter(item => item.Zone === selected.textContent);
-      filteredData.forEach(spot => {
-        htmlStr += travelContentTemplate(spot.Name, spot.Zone, spot.Picture1, spot.Opentime, spot.Add, spot.Tel, spot.Ticketinfo);
-      });
-      mainList.innerHTML = htmlStr;
+      // filteredData.forEach(spot => {
+      //   htmlStr += travelContentTemplate(spot);
+      // });
+      // mainList.innerHTML = htmlStr;
+      setPagination(filteredData, 1);
     })
 
   })
@@ -127,19 +129,113 @@ goTop.addEventListener('click', () => {
   });
 });
 
+// 分頁顯示
+function setPagination(fetchData, currentPage) {
+  
+  //取得總資料筆數
+  const dataTotal = fetchData.length;
+  
+  // 取得資料地區
+  // 若沒有資料地區則將頁面清空
+  let currentZone = "";
+  if(dataTotal === 0){
+    mainList.innerHTML = "";
+    selectPagination.innerHTML = "";
+  }else{
+    currentZone = fetchData[0].Zone;
+  }
 
-// async function pagination() {
-//   try {
-//     const data = await responseData;
-//     const dataTotal = data.length;
-//     const perPage = 6;
+  // 設定每頁顯示資料筆數
+  const contentPerPage = 6;
 
-//     // 計算所需頁數
-//     const pageTotal = Math.ceil(dataTotal / perPage);
-//     console.log(`Total:${dataTotal} 每一頁:${perPage}, 頁數:${pageTotal}`);
-//   }
-//   catch (error) {
+  // 計算所需頁數
+  const pageTotal = Math.ceil(dataTotal / contentPerPage);
 
-//   }
-// }
-// pagination();
+  console.log(`Total: ${dataTotal} 總頁數: ${pageTotal}`);
+
+  // 頁面資料顯示範圍
+  const minData = (currentPage * contentPerPage) - contentPerPage + 1;
+  const maxData = (currentPage * contentPerPage);
+
+  const data = [];
+
+  // 過濾顯示範圍資料
+  fetchData.forEach((item, index) => {
+    if (index + 1 >= minData && index + 1 <= maxData){
+      data.push(item);
+    }
+  })
+
+  // 建立 page 資料物件傳送給分頁產生用
+  const pageObj = {
+    dataTotal,
+    currentPage,
+    pageTotal,
+    currentZone,
+    hasPage: currentPage > 1,
+    hasNext: currentPage < pageTotal
+  }
+
+  // 產生頁面HTML
+  let htmlStr = '';
+  data.forEach(spot => {
+    htmlStr += travelContentTemplate(spot);
+  });
+  mainList.innerHTML = htmlStr;
+
+  paginationBtn(pageObj);
+}
+
+// 分頁按鈕產生
+function paginationBtn (page) {
+  let btnStr = '';
+
+  // 前一頁按鈕
+  if(page.hasPage){
+    btnStr += `<p class="prev" value="${Number(page.currentPage) -1}" data-zone="${page.currentZone}">< prev</p>`;
+  }else{
+    btnStr += `<p class="prev" value="0" style="color: gray; cursor: default">< prev</p>`;
+  }
+  
+  // 頁數按鈕
+  for(let btnNum = 1; btnNum <= page.pageTotal; btnNum++){
+    if(btnNum === page.currentPage){
+      btnStr += `<p value="0" style="color: #559AC8; cursor: default"">${btnNum}</p>`;
+    }else{
+      btnStr += `<p value="${btnNum}" data-zone="${page.currentZone}">${btnNum}</p>`;
+    }
+    
+  }
+
+  // 下一頁按鈕
+  if(page.hasNext){
+    btnStr += `<p class="next" value="${Number(page.currentPage) + 1}" data-zone="${page.currentZone}">next ></p>`;
+  }else{
+    btnStr += `<p class="next" value="0" style="color: gray; cursor: default">next ></p>`;
+  }
+  
+
+  selectPagination.innerHTML = btnStr;
+}
+
+// 監聽點選分頁按鈕
+function switchPage(e){
+  const clickedNum = Number(e.target.getAttribute('value'));
+
+  if(clickedNum === 0){
+    return true;
+  }
+
+  responseData.then(res => {
+    const filteredData = res.filter(item => item.Zone === e.target.dataset.zone);
+    setPagination(filteredData, clickedNum);
+    window.scrollTo({
+      top: 300,
+      behavior: "smooth"
+    });
+  })
+
+}
+
+selectPagination.addEventListener('click', switchPage);
+

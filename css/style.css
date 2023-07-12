@@ -136,6 +136,7 @@ table {
 
 * {
   box-sizing: border-box;
+  font-family:Microsoft JhengHei;
 }
 
 .wrapper {
@@ -352,6 +353,18 @@ main h2 {
   bottom: 90px;
   cursor: pointer;
   display: none;
+}
+
+.pagination {
+  max-width: 180px;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px auto;
+}
+
+.pagination p {
+  cursor: pointer;
+  font-size: 18px;
 }
 
 footer {
