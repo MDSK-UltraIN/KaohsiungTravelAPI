@@ -76,7 +76,6 @@ setZoneOptions();
 
 // 監聽下拉式選單選擇
 selectZone.addEventListener('change', e => {
-  let htmlStr = '';
 
   // 更改 h2 標題
   zoneTitle.innerHTML = e.target.value;
@@ -95,8 +94,9 @@ selectZone.addEventListener('change', e => {
 // 熱門行政區選擇
 hotSpots.forEach(selected => {
   selected.addEventListener('click', e => {
-    let htmlStr = '';
     zoneTitle.innerHTML = e.target.textContent;
+    //更改下拉式選單內容
+    selectZone.value = e.target.textContent;
     responseData.then(res => {
       const filteredData = res.filter(item => item.Zone === selected.textContent);
       // filteredData.forEach(spot => {
@@ -113,7 +113,7 @@ hotSpots.forEach(selected => {
 window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener("scroll", () => {
     if (window.scrollY > 0) {
-      goTop.setAttribute('style', 'display: block');      
+      goTop.setAttribute('style', 'display: block');
     } else {
       goTop.setAttribute('style', 'display: none');
     }
@@ -131,17 +131,17 @@ goTop.addEventListener('click', () => {
 
 // 分頁顯示
 function setPagination(fetchData, currentPage) {
-  
+
   //取得總資料筆數
   const dataTotal = fetchData.length;
-  
+
   // 取得資料地區
   // 若沒有資料地區則將頁面清空
   let currentZone = "";
-  if(dataTotal === 0){
+  if (dataTotal === 0) {
     mainList.innerHTML = "";
     selectPagination.innerHTML = "";
-  }else{
+  } else {
     currentZone = fetchData[0].Zone;
   }
 
@@ -161,7 +161,7 @@ function setPagination(fetchData, currentPage) {
 
   // 過濾顯示範圍資料
   fetchData.forEach((item, index) => {
-    if (index + 1 >= minData && index + 1 <= maxData){
+    if (index + 1 >= minData && index + 1 <= maxData) {
       data.push(item);
     }
   })
@@ -187,42 +187,42 @@ function setPagination(fetchData, currentPage) {
 }
 
 // 分頁按鈕產生
-function paginationBtn (page) {
+function paginationBtn(page) {
   let btnStr = '';
 
   // 前一頁按鈕
-  if(page.hasPage){
-    btnStr += `<p class="prev" value="${Number(page.currentPage) -1}" data-zone="${page.currentZone}">< prev</p>`;
-  }else{
+  if (page.hasPage) {
+    btnStr += `<p class="prev" value="${Number(page.currentPage) - 1}" data-zone="${page.currentZone}">< prev</p>`;
+  } else {
     btnStr += `<p class="prev" value="0" style="color: gray; cursor: default">< prev</p>`;
   }
-  
+
   // 頁數按鈕
-  for(let btnNum = 1; btnNum <= page.pageTotal; btnNum++){
-    if(btnNum === page.currentPage){
+  for (let btnNum = 1; btnNum <= page.pageTotal; btnNum++) {
+    if (btnNum === page.currentPage) {
       btnStr += `<p value="0" style="color: #559AC8; cursor: default"">${btnNum}</p>`;
-    }else{
+    } else {
       btnStr += `<p value="${btnNum}" data-zone="${page.currentZone}">${btnNum}</p>`;
     }
-    
+
   }
 
   // 下一頁按鈕
-  if(page.hasNext){
+  if (page.hasNext) {
     btnStr += `<p class="next" value="${Number(page.currentPage) + 1}" data-zone="${page.currentZone}">next ></p>`;
-  }else{
+  } else {
     btnStr += `<p class="next" value="0" style="color: gray; cursor: default">next ></p>`;
   }
-  
+
 
   selectPagination.innerHTML = btnStr;
 }
 
 // 監聽點選分頁按鈕
-function switchPage(e){
+function switchPage(e) {
   const clickedNum = Number(e.target.getAttribute('value'));
 
-  if(clickedNum === 0){
+  if (clickedNum === 0) {
     return true;
   }
 
