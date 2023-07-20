@@ -24,6 +24,10 @@ async function fetchData(url) {
 // 旅遊列表 HTML 模板
 // spot.Name, spot.Zone, spot.Picture1, spot.Opentime, spot.Add, spot.Tel, spot.Ticketinfo
 function travelContentTemplate(spot) {
+  let ticketInfoImgPath = '';
+  if (spot.Ticketinfo !== '') {
+    ticketInfoImgPath = 'assets/icons_tag.png';
+  }
   return `
   <div class="travel_content">
   <div class="spot_img" style="background-image: url('${spot.Picture1}')">
@@ -34,8 +38,8 @@ function travelContentTemplate(spot) {
     <p><img src="assets/icons_clock.png" alt="">${spot.Opentime}</p>
     <p><img src="assets/icons_pin.png" alt="">${spot.Add}</p>
     
-    <p><img src="assets/icons_phone.png" alt="">${spot.Tel}</p>
-    <p class="ticket_info"><img src="assets/icons_tag.png" alt="">${spot.Ticketinfo}</p>
+    <p><img src="assets/icons_phone.png" alt="" class="spot_detail_tel"> ${spot.Tel}</p>
+    <p class="ticket_info"><img src="${ticketInfoImgPath}" alt="">${spot.Ticketinfo}</p>
   </div>
 </div>`
 }

@@ -291,9 +291,9 @@ main h2 {
 
 .travel_spots {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
-
+  padding: 0 20px;
 }
 
 .travel_content {
@@ -337,8 +337,12 @@ main h2 {
 }
 
 
-.spot_detail img {
-  margin: 0 auto;
+.spot_detail p img {
+  margin-right: 10px;
+}
+
+.spot_detail_tel {
+  margin-left: 2px;
 }
 
 .ticket_info {
